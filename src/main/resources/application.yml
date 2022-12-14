@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+
+
+my:
+  config:
+    exclude-uri:
+      - /todolist/login
+      - /todolist/getCode
+      - /todolist/register
