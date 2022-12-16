@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author zeng
+ * @author gh
  * 权限认证,如果失败,则返回授权失败信息
  */
 @Component
@@ -62,6 +62,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             if (uuid != null && id != null && redisService.exists("user:" + id)) {
                 request.setAttribute("user", userService.getUserByUserId(Integer.valueOf(id)));
                 request.setAttribute("id", Integer.valueOf(id));
+                request.setAttribute("userInfo",userService.getUserInfo(Integer.valueOf(id)));
                 String ret = (String) redisService.get("user:" + id);
                 if (ret.equals(uuid) || true) {
                     //更新过期时间,连续七天不活动则token失效

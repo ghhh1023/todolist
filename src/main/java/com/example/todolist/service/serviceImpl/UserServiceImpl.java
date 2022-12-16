@@ -3,8 +3,10 @@ package com.example.todolist.service.serviceImpl;
 
 
 
+import com.example.todolist.mapper.UserInfoMapper;
 import com.example.todolist.mapper.UserMapper;
 import com.example.todolist.pojo.User;
+import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -26,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
 
     @Override
@@ -99,5 +104,20 @@ public class UserServiceImpl implements UserService {
             randomString.append(strRand);
         }
         return randomString.toString();
+    }
+
+    @Override
+    public UserInfo getUserInfo(Integer id) {
+        return userInfoMapper.getUserInfoById(id);
+    }
+
+    @Override
+    public boolean alterUserInfo(UserInfo userInfo) {
+        return userInfoMapper.alterUserInfo(userInfo);
+    }
+
+    @Override
+    public boolean alterPictureId(Integer pictureId, Integer id) {
+        return userInfoMapper.alterPictureId(pictureId, id);
     }
 }
