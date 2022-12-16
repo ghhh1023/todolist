@@ -3,6 +3,8 @@ package com.example.todolist.pojo;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.sql.Date;
+
 
 @Getter
 @Setter
@@ -14,8 +16,16 @@ public class UserInfo {
 
 
     @Length(max = 11,min = 11,message = "手机号长度必须是11位")
-    private String phoneNum;
+    private String phone;
 
     
     private Integer pictureId;
+
+    private String name;
+
+    private Integer sex;
+
+    private Date birth;
+
+    private String sign;
 }
