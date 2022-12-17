@@ -116,7 +116,53 @@ public interface TaskMapper {
     /*
     * 通过标题更新整条任务
     * */
-//    @Update("update task set area_id = #{new_area}, where title=#{title}")
-//    public boolean alterTaskById(@Param("new_area") Task task,
-//                                        @Param("title") String title);
+    @Update("update task set id = #{id},title = #{title},user_id = #{user_id},content_id = #{content_id},area_id = #{area_id},super_id = #{super_id},level = #{level},begin_time = #{begin_time},end_time = #{end_time},state = #{state},finish_rate = #{finish_rate} where title=#{old_title}")
+    public boolean alterTaskByTitle(Task task, @Param("old_title") String title);
+    /*
+     * 通过id更新整条任务
+     * */
+    @Update("update task set id = #{id},title = #{title},user_id = #{user_id},content_id = #{content_id},area_id = #{area_id},super_id = #{super_id},level = #{level},begin_time = #{begin_time},end_time = #{end_time},state = #{state},finish_rate = #{finish_rate} where id=#{old_id}")
+    public boolean alterTaskById(Task task, @Param("old_id") Integer id);
+
+    /*
+     * 通过任务id修改任务状态
+     * */
+    @Update("update task set state = #{new_state} where id=#{id}")
+    public boolean alterTaskStateById(@Param("new_state") Integer new_state,
+                                     @Param("id") Integer id);
+
+    /*
+     * 通过任务标题修改任务状态
+     * */
+    @Update("update task set state = #{new_state} where title=#{title}")
+    public boolean alterTaskStateByTitle(@Param("new_state") Integer new_state,
+                                        @Param("title") String title);
+
+    /*
+     * 通过任务id修改任务完成率
+     * */
+    @Update("update task set finish_rate = #{new_rate} where id=#{id}")
+    public boolean alterTaskRateById(@Param("new_rate") Double finish_rate,
+                                      @Param("id") Integer id);
+
+    /*
+     * 通过任务标题修改任务完成率
+     * */
+    @Update("update task set finish_rate = #{new_rate} where title=#{title}")
+    public boolean alterTaskRateByTitle(@Param("new_rate") Double finish_rate,
+                                         @Param("title") String title);
+
+    /*
+     * 通过子任务id修改子任务父任务id
+     * */
+    @Update("update task set super_id = #{new_id} where id=#{id}")
+    public boolean alterTaskSuperIdById(@Param("new_id") Integer super_id,
+                                     @Param("id") Integer id);
+
+    /*
+     * 通过子任务标题修改子任务的父任务id
+     * */
+    @Update("update task set super_id = #{new_id} where title=#{title}")
+    public boolean alterTaskSuperIdByTitle(@Param("new_id") Integer super_id,
+                                        @Param("title") String title);
 }
