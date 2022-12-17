@@ -69,7 +69,6 @@ public class RedisSession {
 
     //设置活动状态
     public void setUserActiveStatue(boolean flag) {
-        System.out.println("======================");
         redisService.setbit("current_user", this.id, flag);
     }
 
