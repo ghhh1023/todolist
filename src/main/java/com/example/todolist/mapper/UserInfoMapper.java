@@ -14,7 +14,7 @@ public interface UserInfoMapper {
     @Select("select * from user_info where id=#{id}")
     public UserInfo getUserInfoById(@Param("id") Integer id);
 
-    @Update({"update user_info set picture_id=#{pictureId} where id=#{id}"})
+    @Update({"update user_info set picture_id=#{pictureId},name=#{name},sex=#{sex},birth=#{birth},sign=#{sign} where id=#{id}"})
     public boolean alterUserInfo(UserInfo userInfo);
 
 
