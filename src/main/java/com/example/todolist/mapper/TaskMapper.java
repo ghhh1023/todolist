@@ -29,6 +29,12 @@ public interface TaskMapper {
     public List<Task> getTaskById(@Param("id") Integer id);
 
     /*
+     * 根据分区id返回任务对象
+     * */
+    @Select("select * from task where area_id=#{area_id}")
+    public List<Task> getTaskByAreaId(@Param("area_id") Integer area_id);
+
+    /*
     * 获取指定父任务id的所有子任务
     * */
     @Select("select * from task where super_id=#{super_id}")
@@ -41,6 +47,11 @@ public interface TaskMapper {
     public Integer getTaskLevelCountOfArea(@Param("area_id") Integer area_id,
                                            @Param("level") Integer level);
 
+    /*
+     * 查询指定分区指定任务等级的任务数量
+     * */
+    @Select("select count(*) from task where user_id=#{user_id} and state=1")
+    public Integer getDoneTaskCount(@Param("user_id") Integer user_id);
     /*
     * 新增任务
     * */

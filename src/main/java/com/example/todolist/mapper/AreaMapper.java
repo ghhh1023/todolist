@@ -45,14 +45,14 @@ public interface AreaMapper {
     * 通过分区id修改分区名字
     * */
     @Update("update area set area_name=#{area_name} where area_id=#{area_id}")
-    public boolean alterPictureByName(@Param("area_name") String area_name,
+    public boolean alterNameById(@Param("area_name") String area_name,
                                       @Param("area_id") Integer area_id);
 
     /*
     * 通过分区名字修改分区名字
     * */
     @Update("update area set area_name=#{new_name} where area_name like #{area_name}")
-    public boolean alterPictureByName(@Param("new_name") String new_name,
+    public boolean alterNameByName(@Param("new_name") String new_name,
                                       @Param("area_name") String area_name);
 
     /*
@@ -71,11 +71,17 @@ public interface AreaMapper {
      * 通过分区名删除分区
      * */
     @Delete({"delete from area where area_name like #{name}"})
-    public boolean deleteAreaById(@Param("name") String area_name);
+    public boolean deleteAreaByName(@Param("name") String area_name);
 
     /*
     * 返回分区数量
     * */
     @Select("select count(*) from area")
     public Integer getAreaCount();
+
+    /*
+     * 通过用户id查询分区
+     * */
+    @Select("select * from area where user_id=#{user_id}")
+    public List<Area> getAreaByUserId(@Param("user_id") Integer user_id);
 }
