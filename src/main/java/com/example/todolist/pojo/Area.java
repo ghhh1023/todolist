@@ -10,18 +10,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Area {
-    private Integer area_id;
-    private String area_name;
-    private Integer picture_id;
-    private Integer user_id;
+    private Integer areaId;
+    private String areaName;
+    private Integer pictureId;
+    private Integer userId;
 
     @Override
     public String toString() {
         return "Area{" +
-                "area_id=" + area_id +
-                ", area_name='" + area_name + '\'' +
-                ", picture_id=" + picture_id +
-                ", user_id=" + user_id +
+                "area_id=" + areaId +
+                ", area_name='" + areaName + '\'' +
+                ", picture_id=" + pictureId +
+                ", user_id=" + userId +
                 '}';
     }
 }

@@ -12,14 +12,14 @@ public interface AreaMapper {
     /*
     * 根据分区名返回分区
     * */
-    @Select("select * from area where area_name like #{area_name}")
-    public Area getAreaByAreaName(@Param("area_name") String area_name);
+    @Select("select * from area where areaName like #{areaName}")
+    public Area getAreaByAreaName(@Param("areaName") String areaName);
 
     /*
     * 根据分区id返回分区
     * */
-    @Select("select * from area where area_id = #{area_id}")
-    public Area getAreaByAreaId(@Param("area_id") Integer area_id);
+    @Select("select * from area where area_id = #{areaId}")
+    public Area getAreaByAreaId(@Param("areaId") Integer areaId);
 
     /*
     * 获取所有分区对象
@@ -30,48 +30,48 @@ public interface AreaMapper {
     /*
     * 通过分区ID更新分区图片
     * */
-    @Update("update area set picture_id=#{picture_id} where area_id=#{area_id}")
-    public boolean alterPictureById(@Param("picture_id") Integer picture_id,
-                                    @Param("id") Integer area_id);
+    @Update("update area set picture_id=#{pictureId} where area_id=#{areaId}")
+    public boolean alterPictureById(@Param("pictureId") Integer pictureId,
+                                    @Param("areaId") Integer areaId);
 
     /*
     * 通过分区名更新分区图片
     * */
-    @Update("update area set picture_id=#{picture_id} where area_name like #{area_name}")
-    public boolean alterPictureByName(@Param("picture_id") Integer picture_id,
-                                      @Param("area_name") String area_name);
+    @Update("update area set picture_id=#{pictureId} where area_name like #{areaName}")
+    public boolean alterPictureByName(@Param("pictureId") Integer pictureId,
+                                      @Param("areaName") String areaName);
 
     /*
     * 通过分区id修改分区名字
     * */
-    @Update("update area set area_name=#{area_name} where area_id=#{area_id}")
-    public boolean alterNameById(@Param("area_name") String area_name,
-                                      @Param("area_id") Integer area_id);
+    @Update("update area set area_name=#{areaName} where area_id=#{areaId}")
+    public boolean alterNameById(@Param("areaName") String areaName,
+                                      @Param("areaId") Integer areaId);
 
     /*
     * 通过分区名字修改分区名字
     * */
-    @Update("update area set area_name=#{new_name} where area_name like #{area_name}")
-    public boolean alterNameByName(@Param("new_name") String new_name,
-                                      @Param("area_name") String area_name);
+    @Update("update area set area_name=#{newName} where area_name like #{areaName}")
+    public boolean alterNameByName(@Param("newName") String newName,
+                                      @Param("areaName") String areaName);
 
     /*
     * 新增分区
     * */
-    @Insert({"insert into area(area_id,area_name,picture_id) values(#{area_id},#{area_name},#{picture_id})"})
+    @Insert({"insert into area(area_id,area_name,picture_id) values(#{areaId},#{areaName},#{pictureId})"})
     public boolean insertArea(Area area);
 
     /*
     * 通过id删除分区
     * */
-    @Delete({"delete from area where area_id=#{id}"})
-    public boolean deleteAreaById(@Param("id") Integer area_id);
+    @Delete({"delete from area where area_id=#{areaId}"})
+    public boolean deleteAreaById(@Param("areaId") Integer areaId);
 
     /*
      * 通过分区名删除分区
      * */
-    @Delete({"delete from area where area_name like #{name}"})
-    public boolean deleteAreaByName(@Param("name") String area_name);
+    @Delete({"delete from area where area_name like #{areaName}"})
+    public boolean deleteAreaByName(@Param("areaName") String areaName);
 
     /*
     * 返回分区数量
@@ -82,6 +82,6 @@ public interface AreaMapper {
     /*
      * 通过用户id查询分区
      * */
-    @Select("select * from area where user_id=#{user_id}")
-    public List<Area> getAreaByUserId(@Param("user_id") Integer user_id);
+    @Select("select * from area where user_id=#{userId}")
+    public List<Area> getAreaByUserId(@Param("userId") Integer userId);
 }
