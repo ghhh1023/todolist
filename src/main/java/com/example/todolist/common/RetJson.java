@@ -61,6 +61,14 @@ public class RetJson {
         return retJson;
     }
 
+    public static RetJson success(int code, String msg, Map map) {
+        RetJson retJson = new RetJson();
+        retJson.setCode(code);
+        retJson.setMsg(msg);
+        retJson.setData(map);
+        return retJson;
+    }
+
     public static RetJson fail(int code, String msg) {
         RetJson retJson = new RetJson();
         retJson.setCode(code);

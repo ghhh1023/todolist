@@ -61,11 +61,9 @@ public class UserController {
                     redisService.set("user:" + user.getId(), uuid.toString(), 60 * 60 * 24 * 7);
 
                     Map map = new LinkedHashMap();
-                    map.put("code", 0);
-                    map.put("msg", "登录成功");
                     map.put("token", token);
                     map.put("id", user.getId());
-                    return RetJson.success(map);
+                    return RetJson.success(0,"登录成功",map);
                 } catch (Exception e) {
                     return RetJson.fail(-1, "登录失败,请检查用户名或密码");
                 }
