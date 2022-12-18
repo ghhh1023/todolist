@@ -127,6 +127,20 @@ public class UserController {
     }
 
     /**
+     * 获取用户信息
+     */
+    @RequestMapping("/getUserInfo")
+    public RetJson getUserInfo(HttpServletRequest request){
+        Integer id = ((User)request.getAttribute("user")).getId();
+        UserInfo userInfo=userService.getUserInfo(id);
+        if (userInfo==null){
+            return RetJson.fail(-1,"获取用户信息失败");
+        }else{
+
+            return RetJson.success("userInfo",userInfo);
+        }
+    }
+    /**
      * 修改用户信息
      * @param userInfo 用户信息，字段为：
      * @param request
