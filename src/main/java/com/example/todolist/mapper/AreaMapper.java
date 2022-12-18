@@ -58,7 +58,7 @@ public interface AreaMapper {
     /*
     * 新增分区
     * */
-    @Insert({"insert into area(area_name,picture_id) values(#{areaName},#{pictureId}) where user_id=#{userId}"})
+    @Insert({"insert into area(area_name,picture_id,user_id) values(#{areaName},#{pictureId},#{userId})"})
     public boolean insertArea(Area area);
 
     /*

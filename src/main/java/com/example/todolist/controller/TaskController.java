@@ -34,7 +34,7 @@ public class TaskController {
         return RetJson.success(0, "查询成功", map);
     }
 
-    @GetMapping("/addArea")
+    @PostMapping("/addArea")
     public RetJson addArea(@RequestBody Area area){
         System.out.println(area);
         Integer id = user.getId();
