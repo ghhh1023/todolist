@@ -22,11 +22,11 @@ public interface PathMapper {
     * 通过id 删除path
     * */
     @Delete("delete from path where path_id=#{id}")
-    public boolean deletePath(@Param("id") Integer path_id);
+    public boolean deletePath(@Param("id") Integer pathId);
 
     /*
     * 通过id更新path
     * */
     @Update("update path set path_val=#{val} where path_id=#{id}")
-    public boolean updatePath(@Param("val") String val,@Param("id") Integer path_id);
+    public boolean updatePath(@Param("val") String val,@Param("id") Integer pathId);
 }

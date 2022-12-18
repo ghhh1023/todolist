@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Picture {
-    private Integer picture_id;
-    private Integer path_id;
+    private Integer pictureId;
+    private Integer pathId;
 }

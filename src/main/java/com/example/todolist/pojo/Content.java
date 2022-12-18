@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Content {
-    private Integer content_id;
-    private Integer text_id;
-    private Integer picture_id;
-    private Integer path_id;
+    private Integer contentId;
+    private Integer textId;
+    private Integer pictureId;
+    private Integer pathId;
 }

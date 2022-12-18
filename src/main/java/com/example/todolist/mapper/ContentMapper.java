@@ -20,30 +20,30 @@ public interface ContentMapper {
     /*
      * 根据content_id更新text_id
      * */
-    @Update("update content set text_id=#{text_id} where content_id = #{id}")
-    public boolean alterTextById(@Param("text_id") Integer text_id,@Param("id") Integer content_id);
+    @Update("update content set text_id=#{textId} where content_id = #{id}")
+    public boolean alterTextById(@Param("textId") Integer text_id,@Param("id") Integer contentId);
 
     /*
      * 根据content_id更新picture_id
      * */
-    @Update("update content set picture_id=#{picture_id} where content_id = #{id}")
-    public boolean alterPictureById(@Param("picture_id") Integer picture_id,@Param("id") Integer content_id);
+    @Update("update content set picture_id=#{pictureId} where content_id = #{id}")
+    public boolean alterPictureById(@Param("pictureId") Integer pictureId,@Param("id") Integer contentId);
 
     /*
      * 根据content_id更新path_id
      * */
-    @Update("update content set path_id=#{path_id} where content_id = #{id}")
-    public boolean alterPathById(@Param("path_id") Integer path_id,@Param("id") Integer content_id);
+    @Update("update content set path_id=#{pathId} where content_id = #{id}")
+    public boolean alterPathById(@Param("pathId") Integer pathId,@Param("id") Integer contentId);
 
     /*
     * 增加一条content
     * */
-    @Insert("insert into content(content_id,text_id,picture_id,path_id) values(#{content_id},#{text_id},#{picture_id},#{path_id})")
+    @Insert("insert into content(content_id,text_id,picture_id,path_id) values(#{contentId},#{textId},#{pictureId},#{pathId})")
     public boolean insertContent(Content content);
 
     /*
     * 通过content_id删除一条记录
     * */
     @Delete("delete from content where content_id=#{id}")
-    public boolean deleteContent(@Param("id") Integer content_id);
+    public boolean deleteContent(@Param("id") Integer contentId);
 }

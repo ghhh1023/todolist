@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Path {
-    private Integer path_id;
+    private Integer pathId;
     private String path;
 }
