@@ -82,8 +82,8 @@ public class UserController {
      */
 
     @RequestMapping("/getCode")
-    public RetJson sendIdentifyingCode(@Pattern(regexp = "^1[0-9]{10}$", message = "手机号的长度必须是11位.") @NotNull String phoneNumber) {
-        if (!ValidatedUtil.validate(phoneNumber)) {
+    public RetJson sendIdentifyingCode(@NotNull String phoneNumber) {
+        if (!ValidatedUtil.isMobile(phoneNumber)) {
             return RetJson.fail(-2, "手机号码不合法");
         }
         if ((userService.findUserByUserName(phoneNumber) != null)) {
@@ -106,14 +106,14 @@ public class UserController {
      * @return
      */
     @RequestMapping("/register")
-    public RetJson userRegister(@Pattern(regexp = "^1[0-9]{10}$", message = "手机号的长度必须是11位.") String userName, @NotNull
+    public RetJson userRegister( String userName, @NotNull
     @Length(max = 16, min = 6, message = "密码不合法") String password, String code) {
+        if (!ValidatedUtil.isMobile(userName)) {
+            return RetJson.fail(-2, "手机号码不合法");
+        }
         User user = new User();
         user.setUserName(userName);
         user.setPassword(password);
-        if (!ValidatedUtil.validate(user)) {
-            return RetJson.fail(-3, "请检查参数");
-        }
         if (redisService.exists(user.getUserName()) && redisService.get(user.getUserName()).equals(code)) {
             if (userService.findUserByUserName(user.getUserName()) == null) {
                 userService.register(user);

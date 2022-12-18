@@ -28,7 +28,7 @@ public class ExceptionHandlerController {
             return RetJson.success(0, "ok");
         }
         // 2.return
-        return RetJson.fail(-1, "参数不正确");
+        return RetJson.fail(-4, "参数不正确");
     }
 
     /**
@@ -43,6 +43,6 @@ public class ExceptionHandlerController {
             return RetJson.success(0, "ok");
         }
         // 2.return
-        return RetJson.fail(-1, "参数有误");
+        return RetJson.fail(-3, "参数有误");
     }
 }

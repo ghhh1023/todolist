@@ -1,14 +1,12 @@
 package com.example.todolist.controller;
 
 import com.example.todolist.common.RetJson;
+import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.User;
 import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -36,4 +34,12 @@ public class TaskController {
         return RetJson.success(0, "查询成功", map);
     }
 
+    @PostMapping("/addArea")
+    public RetJson addArea(@RequestBody Area area){
+        System.out.println(area);
+        Integer id = user.getId();
+        area.setUserId(id);
+        taskService.addArea(area);
+        return RetJson.success(0, "增加成功");
+    }
 }
