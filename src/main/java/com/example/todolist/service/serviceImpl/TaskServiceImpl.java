@@ -36,4 +36,9 @@ public class TaskServiceImpl implements TaskService {
     public Integer getDoneTaskCount(Integer id) {
         return taskMapper.getDoneTaskCount(id);
     }
+
+    @Override
+    public Boolean addArea(Area area) {
+        return areaMapper.insertArea(area);
+    }
 }
