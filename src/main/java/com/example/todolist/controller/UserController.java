@@ -4,6 +4,7 @@ package com.example.todolist.controller;
 import com.example.todolist.common.RetJson;
 import com.example.todolist.config.Client;
 import com.example.todolist.pojo.User;
+import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.RedisService;
 import com.example.todolist.service.UserService;
 import com.example.todolist.utils.GenerateVerificationCode;
@@ -21,6 +22,7 @@ import javax.validation.Validation;
 import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -122,6 +124,38 @@ public class UserController {
             return RetJson.fail(-2, "用户已存在！");
         }
         return RetJson.fail(-1, "验证码不正确！");
+    }
+
+    /**
+     * 修改用户信息
+     * @param userInfo 用户信息，字段为：
+     * @param request
+     * @return
+     */
+    @PostMapping("/alterUserInfo")
+    public RetJson alterUserInfo(@RequestBody UserInfo userInfo, HttpServletRequest request){
+        if (!ValidatedUtil.validate(userInfo)){
+            return RetJson.fail(-1,"请检查参数");
+        }
+        Integer id = ((User)request.getAttribute("user")).getId();
+        userInfo.setId(id);
+        UserInfo pastUserInfo = userService.getUserInfo(id);
+        copyFieldValue(userInfo,pastUserInfo);
+        userService.alterUserInfo(userInfo);
+        return RetJson.success(0,"修改成功");
+    }
+
+    private void copyFieldValue(UserInfo userInfo,UserInfo pastUserInfo){
+        for(Field f : userInfo.getClass().getDeclaredFields()){
+            f.setAccessible(true);
+            try {
+                if(f.get(userInfo) == null&&f.get(pastUserInfo) != null){
+                    f.set(userInfo,f.get(pastUserInfo));
+                }
+            }catch (IllegalAccessException e){
+                e.printStackTrace();
+            }
+        }
     }
 
 }

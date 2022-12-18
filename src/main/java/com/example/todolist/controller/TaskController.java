@@ -36,7 +36,6 @@ public class TaskController {
 
     @PostMapping("/addArea")
     public RetJson addArea(@RequestBody Area area){
-        System.out.println(area);
         Integer id = user.getId();
         area.setUserId(id);
         taskService.addArea(area);
