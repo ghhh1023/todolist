@@ -116,8 +116,4 @@ public class UserServiceImpl implements UserService {
         return userInfoMapper.alterUserInfo(userInfo);
     }
 
-    @Override
-    public boolean alterPictureId(Integer pictureId, Integer id) {
-        return userInfoMapper.alterPictureId(pictureId, id);
-    }
 }

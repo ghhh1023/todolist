@@ -19,7 +19,7 @@ public class UserInfo {
     private String phone;
 
     
-    private Integer pictureId;
+    private String pictureSrc;
 
     private String name;
 

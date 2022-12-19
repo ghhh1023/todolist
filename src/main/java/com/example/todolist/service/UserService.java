@@ -22,7 +22,6 @@ public interface UserService {
 
     public boolean alterUserInfo(UserInfo userInfo);
 
-    public boolean alterPictureId(Integer pictureId,Integer id);
 
     User getUserByUserId(Integer valueOf);
 
