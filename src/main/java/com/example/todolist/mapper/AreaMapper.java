@@ -81,8 +81,8 @@ public interface AreaMapper {
     /*
     * 返回分区数量
     * */
-    @Select("select count(*) from area")
-    public Integer getAreaCount();
+    @Select("select count(*) from area where user_id=#{userId}")
+    public Integer getAreaCount(@Param("userId") Integer userId);
 
     /*
      * 通过用户id查询分区

@@ -5,9 +5,11 @@ import com.example.todolist.mapper.TaskMapper;
 import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.Task;
 import com.example.todolist.service.TaskService;
+import com.example.todolist.vo.TaskAreaList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,5 +47,26 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Area getAreaByNameAndId(String areaName, Integer userId) {
         return areaMapper.getAreaByNameAndId(areaName, userId);
+    }
+
+    @Override
+    public List<TaskAreaList> getTaskNum(Integer id) {
+        List<Area> areas = areaMapper.getAreaByUserId(id);
+        List<TaskAreaList> taskAreaLists = new ArrayList<>();
+        for (Area area : areas){
+            Integer areaId = area.getAreaId();
+            Integer cmnTotalNum = taskMapper.getTaskLevelCountOfArea(areaId, 2, 1, 101);
+            Integer cmnCplNum = cmnTotalNum - taskMapper.getTaskLevelCountOfArea(areaId, 2, 1, 100);
+            Integer emgTotalNum = taskMapper.getTaskLevelCountOfArea(areaId, 3, 1, 101);
+            Integer emgCplNum = emgTotalNum - taskMapper.getTaskLevelCountOfArea(areaId, 3, 1, 100);
+            TaskAreaList taskAreaList = new TaskAreaList(areaId, area.getAreaName(), emgCplNum, emgTotalNum, cmnCplNum, cmnTotalNum);
+            taskAreaLists.add(taskAreaList);
+        }
+        return taskAreaLists;
+    }
+
+    @Override
+    public Integer getAreaCount(Integer userId) {
+        return areaMapper.getAreaCount(userId);
     }
 }

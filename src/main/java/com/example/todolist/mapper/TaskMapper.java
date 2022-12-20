@@ -41,11 +41,13 @@ public interface TaskMapper {
     public List<Task> getAllSubTasks(@Param("superId") Integer superId);
 
     /*
-     * 查询指定分区指定任务等级的任务数量
+     * 查询指定分区指定任务等级和指定完成度的任务数量
      * */
-    @Select("select count(*) from task where area_id=#{areaId} and level=#{level}")
+    @Select("select count(*) from task where area_id=#{areaId} and level=#{level} and state=#{state} and finish_rate <#{finishRate}")
     public Integer getTaskLevelCountOfArea(@Param("areaId") Integer areaId,
-                                           @Param("level") Integer level);
+                                           @Param("level") Integer level,
+                                           @Param("state") Integer state,
+                                           @Param("finishRate") Integer finishRate);
 
     /*
      * 查询指定分区指定任务等级的任务数量

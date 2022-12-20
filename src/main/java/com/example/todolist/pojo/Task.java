@@ -22,7 +22,7 @@ public class Task {
     private Date beginTime;
     private Date endTime;
     private Integer state;
-    private Double finishRate;
+    private Integer finishRate;
 
     @Override
     public String toString() {

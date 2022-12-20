@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -31,6 +32,15 @@ public class TaskController {
         Integer id = user.getId();
         Map map = taskService.getTaskViaArea(id);
         map.put("已完成任务数", taskService.getDoneTaskCount(id));
+        return RetJson.success(0, "查询成功", map);
+    }
+
+    @GetMapping("/getTaskNum")
+    public RetJson getTaskNum(){
+        Integer id = user.getId();
+        Map map = new HashMap();
+        map.put("taskAreaNum", taskService.getAreaCount(id));
+        map.put("taskAreaList", taskService.getTaskNum(id));
         return RetJson.success(0, "查询成功", map);
     }
 
