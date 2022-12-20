@@ -38,6 +38,9 @@ public class TaskController {
     public RetJson addArea(@RequestBody Area area){
         Integer id = user.getId();
         area.setUserId(id);
+        if (taskService.getAreaByNameAndId(area.getAreaName(), id) != null){
+            return RetJson.fail(-1, "分区已存在");
+        }
         taskService.addArea(area);
         return RetJson.success(0, "增加成功");
     }

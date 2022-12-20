@@ -41,4 +41,9 @@ public class TaskServiceImpl implements TaskService {
     public Boolean addArea(Area area) {
         return areaMapper.insertArea(area);
     }
+
+    @Override
+    public Area getAreaByNameAndId(String areaName, Integer userId) {
+        return areaMapper.getAreaByNameAndId(areaName, userId);
+    }
 }

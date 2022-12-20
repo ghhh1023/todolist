@@ -10,11 +10,16 @@ import java.util.List;
 public interface AreaMapper {
 
     /*
-    * 根据分区名返回分区
+    * 根据分区名模糊查询分区
     * */
-    @Select("select * from area where areaName like #{areaName}")
-    public Area getAreaByAreaName(@Param("areaName") String areaName);
+    @Select("select * from area where area_name like #{areaName}")
+    public Area getAreaByName(@Param("areaName") String areaName);
 
+    /*
+     * 根据分区名和用户id返回分区
+     * */
+    @Select("select * from area where area_name = #{areaName} and user_id=#{userId}")
+    public Area getAreaByNameAndId(@Param("areaName") String areaName, @Param("userId") Integer userId);
     /*
     * 根据分区id返回分区
     * */

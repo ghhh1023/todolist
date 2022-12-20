@@ -12,4 +12,6 @@ public interface TaskService {
     public Integer getDoneTaskCount(Integer id);
 
     public Boolean addArea(Area area);
+
+    public Area getAreaByNameAndId(String areaName, Integer userId);
 }
