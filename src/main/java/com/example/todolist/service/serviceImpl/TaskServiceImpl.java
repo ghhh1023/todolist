@@ -84,4 +84,14 @@ public class TaskServiceImpl implements TaskService {
     public Boolean updateArea(Area area) {
         return areaMapper.alterArea(area);
     }
+
+    @Override
+    public boolean addTask(Task task) {
+        return taskMapper.insertTask(task);
+    }
+
+    @Override
+    public Task getTaskById(Integer id) {
+        return taskMapper.getTaskById(id);
+    }
 }

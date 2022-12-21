@@ -26,7 +26,7 @@ public interface TaskMapper {
     * 根据任务id返回任务对象
     * */
     @Select("select * from task where id=#{id}")
-    public List<Task> getTaskById(@Param("id") Integer id);
+    public Task getTaskById(@Param("id") Integer id);
 
     /*
      * 根据分区id返回任务对象

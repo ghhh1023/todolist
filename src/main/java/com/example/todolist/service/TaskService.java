@@ -25,4 +25,8 @@ public interface TaskService {
     public Boolean deleteArea(Integer areaId, Integer userId);
 
     public Boolean updateArea(Area area);
+
+    public boolean addTask(Task task);
+
+    public Task getTaskById(Integer id);
 }

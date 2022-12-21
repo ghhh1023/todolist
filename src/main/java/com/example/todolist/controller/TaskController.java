@@ -2,10 +2,12 @@ package com.example.todolist.controller;
 
 import com.example.todolist.common.RetJson;
 import com.example.todolist.pojo.Area;
+import com.example.todolist.pojo.Task;
 import com.example.todolist.pojo.User;
 import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.TaskService;
 import com.example.todolist.utils.CopyFieldValue;
+import lombok.val;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -83,6 +85,18 @@ public class TaskController {
             return RetJson.success(0, "更新成功");
         }
         return RetJson.fail(-2, "更新失败");
+    }
+
+    @PostMapping("/insertTask")
+    public RetJson addTask(@RequestBody Task task){
+        Integer id = user.getId();
+        System.out.println(id);
+        if(taskService.getTaskById(task.getId())!=null){
+            return RetJson.fail(-1, "任务已存在");
+        }else if(taskService.addTask(task)){
+            return RetJson.success(0, "添加成功");
+        }
+        return RetJson.fail(-2, "添加失败");
     }
 
 }
