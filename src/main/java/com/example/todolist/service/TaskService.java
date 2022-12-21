@@ -16,7 +16,13 @@ public interface TaskService {
 
     public Area getAreaByNameAndId(String areaName, Integer userId);
 
+    public Area getAreaById(Integer areaId);
+
     public List<TaskAreaList> getTaskNum(Integer id);
 
     public Integer getAreaCount(Integer userId);
+
+    public Boolean deleteArea(Integer areaId, Integer userId);
+
+    public Boolean updateArea(Area area);
 }

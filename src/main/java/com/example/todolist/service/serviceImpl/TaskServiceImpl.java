@@ -69,4 +69,19 @@ public class TaskServiceImpl implements TaskService {
     public Integer getAreaCount(Integer userId) {
         return areaMapper.getAreaCount(userId);
     }
+
+    @Override
+    public Area getAreaById(Integer areaId) {
+        return areaMapper.getAreaByAreaId(areaId);
+    }
+
+    @Override
+    public Boolean deleteArea(Integer areaId, Integer userId) {
+        return areaMapper.deleteAreaById(areaId, userId);
+    }
+
+    @Override
+    public Boolean updateArea(Area area) {
+        return areaMapper.alterArea(area);
+    }
 }

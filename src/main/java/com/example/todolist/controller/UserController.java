@@ -7,10 +7,7 @@ import com.example.todolist.pojo.User;
 import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.RedisService;
 import com.example.todolist.service.UserService;
-import com.example.todolist.utils.GenerateVerificationCode;
-import com.example.todolist.utils.JwtUtils;
-import com.example.todolist.utils.MobileMessageUtil;
-import com.example.todolist.utils.ValidatedUtil;
+import com.example.todolist.utils.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -154,22 +151,11 @@ public class UserController {
         Integer id = ((User)request.getAttribute("user")).getId();
         userInfo.setId(id);
         UserInfo pastUserInfo = userService.getUserInfo(id);
-        copyFieldValue(userInfo,pastUserInfo);
+        CopyFieldValue.copyFieldValue(userInfo,pastUserInfo);
         userService.alterUserInfo(userInfo);
         return RetJson.success(0,"修改成功");
     }
 
-    private void copyFieldValue(UserInfo userInfo,UserInfo pastUserInfo){
-        for(Field f : userInfo.getClass().getDeclaredFields()){
-            f.setAccessible(true);
-            try {
-                if(f.get(userInfo) == null&&f.get(pastUserInfo) != null){
-                    f.set(userInfo,f.get(pastUserInfo));
-                }
-            }catch (IllegalAccessException e){
-                e.printStackTrace();
-            }
-        }
-    }
+
 
 }

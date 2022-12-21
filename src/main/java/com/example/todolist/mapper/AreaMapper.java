@@ -2,6 +2,7 @@ package com.example.todolist.mapper;
 
 import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.User;
+import com.example.todolist.pojo.UserInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -69,8 +70,8 @@ public interface AreaMapper {
     /*
     * 通过id删除分区
     * */
-    @Delete({"delete from area where area_id=#{areaId}"})
-    public boolean deleteAreaById(@Param("areaId") Integer areaId);
+    @Delete({"delete from area where area_id=#{areaId} and user_id=#{userId}"})
+    public boolean deleteAreaById(@Param("areaId") Integer areaId, @Param("userId")Integer userId);
 
     /*
      * 通过分区名删除分区
@@ -89,4 +90,10 @@ public interface AreaMapper {
      * */
     @Select("select * from area where user_id=#{userId}")
     public List<Area> getAreaByUserId(@Param("userId") Integer userId);
+
+    /*
+     * 更新分区
+     * */
+    @Update({"update area set area_name=#{areaName},picture_id=#{pictureId} where area_id=#{areaId}"})
+    public boolean alterArea(Area area);
 }
