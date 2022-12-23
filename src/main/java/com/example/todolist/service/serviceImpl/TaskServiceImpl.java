@@ -2,12 +2,16 @@ package com.example.todolist.service.serviceImpl;
 
 import com.example.todolist.mapper.AreaMapper;
 import com.example.todolist.mapper.TaskMapper;
+import com.example.todolist.mapper.TaskPictureMapper;
 import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.Task;
+import com.example.todolist.pojo.TaskPicture;
 import com.example.todolist.service.TaskService;
 import com.example.todolist.vo.TaskAreaList;
+import com.example.todolist.vo.TaskPictureContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +25,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     AreaMapper areaMapper;
+
+    @Autowired
+    TaskPictureMapper taskPictureMapper;
 
     // 通过用户id查询任务分类，再通过分类查询任务
     @Override
@@ -114,5 +121,28 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getAllSubTasks(Integer id) {
         return taskMapper.getAllSubTasks(id);
+    }
+
+    @Override
+    public List<TaskPicture> getAllTaskPicture(Integer taskId) {
+        return taskPictureMapper.getPictureByTaskId(taskId);
+    }
+
+    @Override
+    @Transactional
+    public boolean alterTaskContentById(String content, List<String> taskPictureSrcList, Integer taskId) {
+        boolean flag1 = taskMapper.alterTaskContentById(content, taskId);
+        boolean flag2 = taskPictureMapper.deleteTaskPicture(taskId);
+        boolean flag3 = true;
+        TaskPicture taskPicture = new TaskPicture();
+        for(String pictureSrc : taskPictureSrcList){
+            taskPicture.setTaskId(taskId);
+            taskPicture.setPictureSrc(pictureSrc);
+            flag3 = taskPictureMapper.insertTaskPicture(taskPicture);
+            if (!flag3){
+                break;
+            }
+        }
+        return flag1 && flag2 && flag3;
     }
 }

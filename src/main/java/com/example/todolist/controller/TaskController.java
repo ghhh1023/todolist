@@ -7,6 +7,8 @@ import com.example.todolist.pojo.User;
 import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.TaskService;
 import com.example.todolist.utils.CopyFieldValue;
+import com.example.todolist.vo.TaskContent;
+import com.example.todolist.vo.TaskPictureContent;
 import lombok.val;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,5 +237,24 @@ public class TaskController {
         map.put("taskList",taskRateList);
         map.put("listLength",taskRateList.size());
         return RetJson.success(0,"获取信息成功",map);
+    }
+
+    @GetMapping("/getTaskContent")
+    public RetJson getTaskContent(@Param("taskId") Integer taskId){
+        if (taskService.getTaskById(taskId) == null){
+            return RetJson.fail(-1, "查询失败");
+        }
+        Task task = taskService.getTaskById(taskId);
+        TaskContent taskContent = new TaskContent(taskId, task.getContent(), taskService.getAllTaskPicture(taskId));
+        return RetJson.success("taskContent", taskContent);
+    }
+
+    @PutMapping("updateTaskContent")
+    public RetJson updateTaskContent(@RequestBody TaskPictureContent taskContent){
+        System.out.println(taskContent);
+        if (taskService.alterTaskContentById(taskContent.getContent(), taskContent.getTaskPictureList(), taskContent.getTaskId())){
+            return RetJson.success(0, "更新成功");
+        }
+        return RetJson.fail(-1,"更新失败");
     }
 }
