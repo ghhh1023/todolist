@@ -26,7 +26,33 @@ public interface TaskService {
 
     public Boolean updateArea(Area area);
 
+    /*
+    * 增加任务
+    * */
     public boolean addTask(Task task);
 
+    /*
+    * 通过id获取任务
+    * */
     public Task getTaskById(Integer id);
+
+    /*
+    * 获取指定分区所有任务
+    * */
+    public List<Task> getAreaTaskList(Integer id);
+
+    /*
+    * 根据分区id和任务等级获取所有任务
+    * */
+    public List<Task> getTaskByAreaAndLevel(Integer areaId, Integer level);
+
+    /*
+     * 获取指定父任务id的所有子任务数量
+     * */
+    public Integer getSubTaskCount(Integer id);
+
+    /*
+    * 获取指定父任务id的所有子任务
+    * */
+    public List<Task> getAllSubTasks(Integer id);
 }

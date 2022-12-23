@@ -4,7 +4,7 @@ import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.Task;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -41,6 +41,12 @@ public interface TaskMapper {
     public List<Task> getAllSubTasks(@Param("superId") Integer superId);
 
     /*
+    * 获取指定父任务id的所有子任务数量
+    * */
+    @Select("select count(*) from task where super_id=#{superId}")
+    public Integer getSubTasksCount(@Param("superId") Integer superId);
+
+    /*
      * 查询指定分区指定任务等级和指定完成度的任务数量
      * */
     @Select("select count(*) from task where area_id=#{areaId} and level=#{level} and state=#{state} and finish_rate <#{finishRate}")
@@ -48,6 +54,12 @@ public interface TaskMapper {
                                            @Param("level") Integer level,
                                            @Param("state") Integer state,
                                            @Param("finishRate") Integer finishRate);
+
+    /*
+    * 根据分区id和任务等级获取所有任务
+    * */
+    @Select("select * from task where area_id=#{areaId} and level=#{level}")
+    public List<Task> getTaskByAreaAndLevel(@Param("areaId") Integer areaId,@Param("level") Integer level);
 
     /*
      * 查询指定分区指定任务等级的任务数量

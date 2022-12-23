@@ -85,6 +85,7 @@ public class TaskServiceImpl implements TaskService {
         return areaMapper.alterArea(area);
     }
 
+    /*2022-12-20*/
     @Override
     public boolean addTask(Task task) {
         return taskMapper.insertTask(task);
@@ -93,5 +94,25 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getTaskById(Integer id) {
         return taskMapper.getTaskById(id);
+    }
+
+    @Override
+    public List<Task> getAreaTaskList(Integer id) {
+        return taskMapper.getTaskByAreaId(id);
+    }
+
+    @Override
+    public List<Task> getTaskByAreaAndLevel(Integer areaId, Integer level) {
+        return taskMapper.getTaskByAreaAndLevel(areaId, level);
+    }
+
+    @Override
+    public Integer getSubTaskCount(Integer id) {
+        return taskMapper.getSubTasksCount(id);
+    }
+
+    @Override
+    public List<Task> getAllSubTasks(Integer id) {
+        return taskMapper.getAllSubTasks(id);
     }
 }
