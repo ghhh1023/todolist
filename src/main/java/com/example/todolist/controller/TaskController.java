@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/task")
@@ -104,20 +101,20 @@ public class TaskController {
     }
 
     @PostMapping("/getAreaTask")
-    public RetJson getAreaTask(@Param("areaId") String areaId){
+    public RetJson getAreaTask(@Param("areaId") Integer areaId){
         Integer id = user.getId();
-        Integer area_Id = Integer.parseInt(areaId);
+//        Integer area_Id = Integer.parseInt(areaId);
         System.out.println(id);
         Map taskRateList=new HashMap();
-        for(int i=0;i<3;i++){
+        for(int i=3;i>0;i--){
             Map taskRateListItem=new HashMap();
             Integer rateNum=0;
             Integer cplNum=0;
             Integer totalNum=0;
             Integer restNum=0;
-            Map taskList=new HashMap();
-//            System.out.println(areaId +"+"+i);
-            List<Task> areaTaskList = taskService.getTaskByAreaAndLevel(area_Id,i);
+//            Map taskList=new HashMap();
+            List<Map> taskList= new ArrayList<>();
+            List<Task> areaTaskList = taskService.getTaskByAreaAndLevel(areaId,i);
             rateNum=areaTaskList.size();
 //            System.out.println(rateNum);
             /*该分区该优先级下所有任务*/
@@ -207,16 +204,16 @@ public class TaskController {
                     taskListItem.put("cplSonNum",0);
                     taskListItem.put("totalSonNum",0);
                 }
-                taskList.put(index+"",taskListItem);
+                taskList.add(taskListItem);
                 index++;
             }
-            taskRateListItem.put("rateNum",rateNum);
             taskRateListItem.put("cplNum",cplNum);
+            taskRateListItem.put("rateNum",rateNum);
             taskRateListItem.put("totalNum",totalNum);
             taskRateListItem.put("restNum",restNum);
             taskRateListItem.put("taskList",taskList);
             taskRateList.put(i+"",taskRateListItem);
         }
-        return RetJson.success(1,"获取信息成功",taskRateList);
+        return RetJson.success(0,"获取信息成功",taskRateList);
     }
 }
