@@ -114,6 +114,16 @@ public class TaskController {
 //            Map taskList=new HashMap();
             List<Map> taskList= new ArrayList<>();
             List<Task> areaTaskList = taskService.getTaskByAreaAndLevel(areaId,i);
+            areaTaskList.sort((o1, o2) -> {
+                long t1=o1.getEndTime().getTime()-o2.getEndTime().getTime();
+                if(t1>0){
+                    return 1;
+                }else if(t1==0){
+                    return 0;
+                }else{
+                    return -1;
+                }
+            });
 //            System.out.println(rateNum);
             /*该分区该优先级下所有任务*/
             int index=0;
