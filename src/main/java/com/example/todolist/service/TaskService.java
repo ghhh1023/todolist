@@ -1,7 +1,9 @@
 package com.example.todolist.service;
 
 import com.example.todolist.pojo.Area;
+import com.example.todolist.pojo.Picture;
 import com.example.todolist.pojo.Task;
+import com.example.todolist.pojo.TaskPicture;
 import com.example.todolist.vo.TaskAreaList;
 
 import java.util.List;
@@ -55,4 +57,16 @@ public interface TaskService {
     * 获取指定父任务id的所有子任务
     * */
     public List<Task> getAllSubTasks(Integer id);
+
+    /*
+     * 获取指定任务id的所有备注图片
+     * */
+    public List<TaskPicture> getAllTaskPicture(Integer taskId);
+
+    /*
+     * 更新任务内容
+     * */
+    public boolean alterTaskContentById(String content, List<String> taskPictureSrcList, Integer taskId);
+
+
 }

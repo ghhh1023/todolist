@@ -16,7 +16,7 @@ public class Task {
     private Integer id;
     private String title;
     private Integer userId;
-    private Integer contentId;
+    private String content;
     private Integer areaId;
     private Integer superId;
     private Integer level;
@@ -31,7 +31,7 @@ public class Task {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", userId=" + userId +
-                ", contentId=" + contentId +
+                ", content=" + content +
                 ", areaId=" + areaId +
                 ", superId=" + superId +
                 ", level=" + level +

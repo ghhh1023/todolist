@@ -69,7 +69,7 @@ public interface TaskMapper {
     /*
     * 新增任务
     * */
-    @Insert({"insert into task(id,title,user_id,content_id,area_id,super_id,level,begin_time,end_time,state,finish_rate) values(#{id},#{title},#{userId},#{contentId},#{areaId},#{superId},#{level},#{beginTime},#{endTime},#{state},#{finishRate})"})
+    @Insert({"insert into task(id,title,user_id,content,area_id,super_id,level,begin_time,end_time,state,finish_rate) values(#{id},#{title},#{userId},#{content},#{areaId},#{superId},#{level},#{beginTime},#{endTime},#{state},#{finishRate})"})
     public boolean insertTask(Task task);
 
     /*
@@ -141,12 +141,12 @@ public interface TaskMapper {
     /*
     * 通过标题更新整条任务
     * */
-    @Update("update task set id = #{id},title = #{title},user_id = #{userId},content_id = #{contentId},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where title=#{oldTitle}")
+    @Update("update task set id = #{id},title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where title=#{oldTitle}")
     public boolean alterTaskByTitle(Task task, @Param("oldTitle") String title);
     /*
      * 通过id更新整条任务
      * */
-    @Update("update task set id = #{id},title = #{title},user_id = #{userId},content_id = #{contentId},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where id=#{oldId}")
+    @Update("update task set id = #{id},title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where id=#{oldId}")
     public boolean alterTaskById(Task task, @Param("oldId") Integer id);
 
     /*
@@ -190,4 +190,11 @@ public interface TaskMapper {
     @Update("update task set super_id = #{newId} where title=#{title}")
     public boolean alterTaskSuperIdByTitle(@Param("newId") Integer superId,
                                         @Param("title") String title);
+
+    /*
+     * 通过任务id修改任务备注内容
+     * */
+    @Update("update task set content = #{content} where id=#{id}")
+    public boolean alterTaskContentById(@Param("content") String content,
+                                        @Param("id") Integer id);
 }
