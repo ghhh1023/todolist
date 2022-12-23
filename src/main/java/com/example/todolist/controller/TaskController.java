@@ -105,7 +105,8 @@ public class TaskController {
         Integer id = user.getId();
 //        Integer area_Id = Integer.parseInt(areaId);
         System.out.println(id);
-        Map taskRateList=new HashMap();
+//        Map taskRateList=new HashMap();
+        List<Map> taskRateList =new ArrayList<>();
         for(int i=3;i>0;i--){
             Map taskRateListItem=new HashMap();
             Integer rateNum=0;
@@ -212,8 +213,11 @@ public class TaskController {
             taskRateListItem.put("totalNum",totalNum);
             taskRateListItem.put("restNum",restNum);
             taskRateListItem.put("taskList",taskList);
-            taskRateList.put(i+"",taskRateListItem);
+            taskRateList.add(taskRateListItem);
         }
-        return RetJson.success(0,"获取信息成功",taskRateList);
+        Map map=new HashMap();
+        map.put("taskList",taskRateList);
+        map.put("listLength",taskRateList.size());
+        return RetJson.success(0,"获取信息成功",map);
     }
 }
