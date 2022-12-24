@@ -9,14 +9,13 @@ import com.example.todolist.pojo.TaskPicture;
 import com.example.todolist.service.TaskService;
 import com.example.todolist.vo.TaskAreaList;
 import com.example.todolist.vo.TaskPictureContent;
+import lombok.Data;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -144,5 +143,26 @@ public class TaskServiceImpl implements TaskService {
             }
         }
         return flag1 && flag2 && flag3;
+    }
+
+    @Override
+    public boolean refreshTask() {
+        final List<Task> allTasks = taskMapper.getAllTasks();
+        for(int i=0;i<allTasks.size();i++){
+            final Task task = allTasks.get(i);
+            final Date endTime = task.getEndTime();
+            final Date beginTime = task.getBeginTime();
+            long endDay = endTime.getTime()/(1000*60*60*24);
+            long beginDay = beginTime.getTime()/(1000*60*60*24);
+            long today=new Date().getTime()/(1000*60*60*24);
+            /*有效:截至未完成、任务时间与今天交集*/
+            if(endDay-today<0&&task.getFinishRate()!=100 ||!(beginDay>today)&&!(endDay<today)){
+                task.setState(1);
+            }else{
+                task.setState(0);
+            }
+            taskMapper.alterTaskById(task,task.getId());
+        }
+        return true;
     }
 }

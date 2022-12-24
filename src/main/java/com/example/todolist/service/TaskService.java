@@ -68,5 +68,8 @@ public interface TaskService {
      * */
     public boolean alterTaskContentById(String content, List<String> taskPictureSrcList, Integer taskId);
 
-
+    /*
+    * 刷新数据库
+    * */
+    public boolean refreshTask();
 }

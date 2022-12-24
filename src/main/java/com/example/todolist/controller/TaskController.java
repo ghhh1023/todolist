@@ -104,6 +104,7 @@ public class TaskController {
 
     @PostMapping("/getAreaTask")
     public RetJson getAreaTask(@Param("areaId") Integer areaId){
+        taskService.refreshTask();
         Integer id = user.getId();
 //        Integer area_Id = Integer.parseInt(areaId);
         System.out.println(id);
