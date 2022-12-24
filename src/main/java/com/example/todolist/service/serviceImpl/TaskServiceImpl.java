@@ -150,6 +150,7 @@ public class TaskServiceImpl implements TaskService {
         Integer newState = 0;
         List<Task> allTasks = taskMapper.getAllTasksByUserId(userId);
         for(Task task : allTasks){
+            newState = 0;
             final Date endTime = task.getEndTime();
             final Date beginTime = task.getBeginTime();
             long endDay = endTime.getTime()/(1000*60*60*24);
