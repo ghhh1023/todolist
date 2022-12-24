@@ -107,7 +107,6 @@ public class TaskController {
     public RetJson getAreaTask(@Param("areaId") Integer areaId){
         Integer id = user.getId();
         taskService.refreshTask(id);
-//        Integer area_Id = Integer.parseInt(areaId);
         System.out.println(id);
 //        Map taskRateList=new HashMap();
         List<Map> taskRateList =new ArrayList<>();
@@ -133,102 +132,104 @@ public class TaskController {
             int index=0;
             for(Task task:areaTaskList){
                 Map taskListItem=new HashMap();
-                /*所有已完成任务,任务有效,为父任务*/
-                if(task.getFinishRate()==100&&task.getState()==1&&task.getSuperId()==0) {
-                    cplNum = cplNum + 1;
-                }
-                /*该优先级下有效任务总数，父任务*/
-                if(task.getState()==1&&task.getSuperId()==0){
-                    totalNum=totalNum+1;
-                }
-                int compare = task.getEndTime().compareTo(new Date());
-                taskListItem.put("id",task.getId());
-                taskListItem.put("rate",task.getLevel());
-                /*截至时间早于今天，且未完成*/
-                if(task.getFinishRate()!=100&&compare<0){
-                    /*计算距今天数*/
-                    Date endTime =task.getEndTime();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    final String formatStr = format.format(endTime);
-                    LocalDate target = LocalDate.parse(formatStr);
-                    LocalDate today = LocalDate.now();
-                    long days = Math.abs(target.toEpochDay() - today.toEpochDay());
-                    taskListItem.put("restDay",days);
-                }
+                if(task.getState()==1){
+                    /*所有已完成任务,任务有效,为父任务*/
+                    if(task.getFinishRate()==100&&task.getState()==1&&task.getSuperId()==0) {
+                        cplNum = cplNum + 1;
+                    }
+                    /*该优先级下有效任务总数，父任务*/
+                    if(task.getState()==1&&task.getSuperId()==0){
+                        totalNum=totalNum+1;
+                    }
+                    int compare = task.getEndTime().compareTo(new Date());
+                    taskListItem.put("id",task.getId());
+                    taskListItem.put("rate",task.getLevel());
+                    /*截至时间早于今天，且未完成*/
+                    if(task.getFinishRate()!=100&&compare<0){
+                        /*计算距今天数*/
+                        Date endTime =task.getEndTime();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        final String formatStr = format.format(endTime);
+                        LocalDate target = LocalDate.parse(formatStr);
+                        LocalDate today = LocalDate.now();
+                        long days = Math.abs(target.toEpochDay() - today.toEpochDay());
+                        taskListItem.put("restDay",days);
+                    }
 
-                taskListItem.put("finishRate",task.getFinishRate());
-                /*toEndTime：距截止时间*/
-                long mills1 = task.getEndTime().getTime();//截至时间，时间戳
-                long mills2 = new Date().getTime();//现在时间戳
-                long distanceMillis = mills1 - mills2;//相距毫秒数
-                if(distanceMillis<=0){
-                    taskListItem.put("toEndTime","任务已截止");
-                }else if(distanceMillis/(1000)<60){
-                    taskListItem.put("toEndTime","少于1分钟");
-                }else if(distanceMillis/(1000*60)<60){
-                    long minutes = distanceMillis/(1000*60);
-                    taskListItem.put("toEndTime","剩余"+minutes+"分钟");
-                }else if(distanceMillis/(1000*60*60)<24){
-                    long minutes=distanceMillis/(1000*60);
-                    long hours = minutes/60;
-                    long restMinutes=minutes%60;
-                    taskListItem.put("toEndTime","剩余"+hours+"小时"+restMinutes+"分钟");
-                }else if(distanceMillis/(1000*60*60*24)<7){
-                    long hours=distanceMillis/(1000*60*60);
-                    long days=hours/24;
-                    long restHours=hours%24;
-                    taskListItem.put("toEndTime","剩余"+days+"天"+restHours+"小时");
-                }else{
-                    long days=distanceMillis/(1000*60*60*24);
-                    taskListItem.put("toEndTime","剩余"+days+"天");
-                }
+                    taskListItem.put("finishRate",task.getFinishRate());
+                    /*toEndTime：距截止时间*/
+                    long mills1 = task.getEndTime().getTime();//截至时间，时间戳
+                    long mills2 = new Date().getTime();//现在时间戳
+                    long distanceMillis = mills1 - mills2;//相距毫秒数
+                    if(distanceMillis<=0){
+                        taskListItem.put("toEndTime","任务已截止");
+                    }else if(distanceMillis/(1000)<60){
+                        taskListItem.put("toEndTime","少于1分钟");
+                    }else if(distanceMillis/(1000*60)<60){
+                        long minutes = distanceMillis/(1000*60);
+                        taskListItem.put("toEndTime","剩余"+minutes+"分钟");
+                    }else if(distanceMillis/(1000*60*60)<24){
+                        long minutes=distanceMillis/(1000*60);
+                        long hours = minutes/60;
+                        long restMinutes=minutes%60;
+                        taskListItem.put("toEndTime","剩余"+hours+"小时"+restMinutes+"分钟");
+                    }else if(distanceMillis/(1000*60*60*24)<7){
+                        long hours=distanceMillis/(1000*60*60);
+                        long days=hours/24;
+                        long restHours=hours%24;
+                        taskListItem.put("toEndTime","剩余"+days+"天"+restHours+"小时");
+                    }else{
+                        long days=distanceMillis/(1000*60*60*24);
+                        taskListItem.put("toEndTime","剩余"+days+"天");
+                    }
 
-                taskListItem.put("parentId",task.getSuperId());
-                taskListItem.put("title",task.getTitle());
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                taskListItem.put("begin",format.format(task.getBeginTime()));
-                taskListItem.put("end",format.format(task.getEndTime()));
-                /*获取子任务数*/
-                final Integer subTaskCount = taskService.getSubTaskCount(task.getId());
-                if(subTaskCount>0){
-                    final List<Task> allSubTasks = taskService.getAllSubTasks(task.getId());
-                    allSubTasks.sort(new Comparator<Task>() {
-                        @Override
-                        public int compare(Task o1, Task o2) {
-                            long t1=o1.getEndTime().getTime()-o2.getEndTime().getTime();
-                            if(t1>0){
-                                return 1;
-                            }else if(t1==0){
-                                return 0;
-                            }else{
-                                return -1;
+                    taskListItem.put("parentId",task.getSuperId());
+                    taskListItem.put("title",task.getTitle());
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    taskListItem.put("begin",format.format(task.getBeginTime()));
+                    taskListItem.put("end",format.format(task.getEndTime()));
+                    /*获取子任务数*/
+                    final Integer subTaskCount = taskService.getSubTaskCount(task.getId());
+                    if(subTaskCount>0){
+                        final List<Task> allSubTasks = taskService.getAllSubTasks(task.getId());
+                        allSubTasks.sort(new Comparator<Task>() {
+                            @Override
+                            public int compare(Task o1, Task o2) {
+                                long t1=o1.getEndTime().getTime()-o2.getEndTime().getTime();
+                                if(t1>0){
+                                    return 1;
+                                }else if(t1==0){
+                                    return 0;
+                                }else{
+                                    return -1;
+                                }
+                            }
+                        });
+                        /*获取完成子任务数、所有子任务数*/
+                        int subFinish=0;
+                        int allTask=0;
+                        for(Task task1 : allSubTasks){
+                            /*该子任务完成*/
+                            if(task1.getFinishRate()==100&&task1.getState()==1){
+                                subFinish++;
+                            }
+                            /*该子任务未完成、未截至*/
+    //                        System.out.println(task1.getEndTime().compareTo(new Date()));
+                            if(task1.getState()==1){
+                                allTask++;
                             }
                         }
-                    });
-                    /*获取完成子任务数、所有子任务数*/
-                    int subFinish=0;
-                    int allTask=0;
-                    for(Task task1 : allSubTasks){
-                        /*该子任务完成*/
-                        if(task1.getFinishRate()==100&&task1.getState()==1){
-                            subFinish++;
-                        }
-                        /*该子任务未完成、未截至*/
-//                        System.out.println(task1.getEndTime().compareTo(new Date()));
-                        if(task1.getState()==1){
-                            allTask++;
-                        }
+                        taskListItem.put("isParent",true);
+                        taskListItem.put("cplSonNum",subFinish);
+                        taskListItem.put("totalSonNum",allTask);
+                    }else{
+                        taskListItem.put("isParent",false);
+                        taskListItem.put("cplSonNum",0);
+                        taskListItem.put("totalSonNum",0);
                     }
-                    taskListItem.put("isParent",true);
-                    taskListItem.put("cplSonNum",subFinish);
-                    taskListItem.put("totalSonNum",allTask);
-                }else{
-                    taskListItem.put("isParent",false);
-                    taskListItem.put("cplSonNum",0);
-                    taskListItem.put("totalSonNum",0);
+                    taskList.add(taskListItem);
+                    index++;
                 }
-                taskList.add(taskListItem);
-                index++;
             }
             taskRateListItem.put("cplNum",cplNum);
             taskRateListItem.put("totalNum",totalNum);
