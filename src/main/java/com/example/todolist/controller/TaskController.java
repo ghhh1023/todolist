@@ -46,6 +46,7 @@ public class TaskController {
     @GetMapping("/getTaskNum")
     public RetJson getTaskNum(){
         Integer id = user.getId();
+        taskService.refreshTask(id);
         Map map = new HashMap();
         map.put("taskAreaNum", taskService.getAreaCount(id));
         map.put("taskAreaList", taskService.getTaskNum(id));
@@ -104,8 +105,8 @@ public class TaskController {
 
     @PostMapping("/getAreaTask")
     public RetJson getAreaTask(@Param("areaId") Integer areaId){
-        taskService.refreshTask();
         Integer id = user.getId();
+        taskService.refreshTask(id);
 //        Integer area_Id = Integer.parseInt(areaId);
         System.out.println(id);
 //        Map taskRateList=new HashMap();

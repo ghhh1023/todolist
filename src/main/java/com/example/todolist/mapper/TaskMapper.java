@@ -143,11 +143,12 @@ public interface TaskMapper {
     * */
     @Update("update task set id = #{id},title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where title=#{oldTitle}")
     public boolean alterTaskByTitle(Task task, @Param("oldTitle") String title);
+
     /*
      * 通过id更新整条任务
      * */
-    @Update("update task set id = #{id},title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where id=#{oldId}")
-    public boolean alterTaskById(Task task, @Param("oldId") Integer id);
+    @Update("update task set title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where id=#{id}")
+    public boolean alterTask(Task task);
 
     /*
      * 通过任务id修改任务状态
@@ -197,4 +198,11 @@ public interface TaskMapper {
     @Update("update task set content = #{content} where id=#{id}")
     public boolean alterTaskContentById(@Param("content") String content,
                                         @Param("id") Integer id);
+
+    /*
+     * 获取一个用户的所有任务对象
+     * */
+    @Select("select * from task where user_id = #{userId}")
+    public List<Task> getAllTasksByUserId(@Param("userId") Integer userId);
+
 }

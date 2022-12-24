@@ -71,5 +71,5 @@ public interface TaskService {
     /*
     * 刷新数据库
     * */
-    public boolean refreshTask();
+    public boolean refreshTask(Integer userId);
 }

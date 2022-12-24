@@ -146,10 +146,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean refreshTask() {
-        final List<Task> allTasks = taskMapper.getAllTasks();
-        for(int i=0;i<allTasks.size();i++){
-            final Task task = allTasks.get(i);
+    public boolean refreshTask(Integer userId) {
+        Integer newState = 0;
+        List<Task> allTasks = taskMapper.getAllTasksByUserId(userId);
+        for(Task task : allTasks){
             final Date endTime = task.getEndTime();
             final Date beginTime = task.getBeginTime();
             long endDay = endTime.getTime()/(1000*60*60*24);
@@ -157,11 +157,9 @@ public class TaskServiceImpl implements TaskService {
             long today=new Date().getTime()/(1000*60*60*24);
             /*有效:截至未完成、任务时间与今天交集*/
             if(endDay-today<0&&task.getFinishRate()!=100 ||!(beginDay>today)&&!(endDay<today)){
-                task.setState(1);
-            }else{
-                task.setState(0);
+                newState = 1;
             }
-            taskMapper.alterTaskById(task,task.getId());
+            taskMapper.alterTaskStateById(newState, task.getId());
         }
         return true;
     }
