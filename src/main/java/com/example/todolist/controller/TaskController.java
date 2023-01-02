@@ -12,6 +12,7 @@ import com.example.todolist.vo.TaskPictureContent;
 import lombok.val;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,30 +95,8 @@ public class TaskController {
     }
 
     @PostMapping("/insertTask")
-    public RetJson addTask(@Param("level") Integer level,@Param("superId") Integer superId,
-                           @Param("beginTime") String beginTime,@Param("endTime") String endTime,
-                           @Param("finishRate") Integer finishRate,@Param("title") String title,
-                           @Param("areaId") Integer areaId){
-        Task task=new Task();
-        task.setAreaId(areaId);
-        task.setTitle(title);
-        task.setFinishRate(finishRate);
-        task.setSuperId(superId);
-        task.setLevel(level);
-        DateFormat cstFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateFormat gmtFormate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        try {
-            Date date1=cstFormate.parse(beginTime);
-            Date date2=cstFormate.parse(endTime);
-            System.out.println(date1);
-            task.setBeginTime(date1);
-            task.setEndTime(date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+    public RetJson addTask(@RequestBody Task task){
         Integer id = user.getId();
-        System.out.println(id);
         task.setUserId(id);
         System.out.println(task.toString());
         if(taskService.getTaskByTitle(task.getTitle())!=null){

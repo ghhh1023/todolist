@@ -22,7 +22,11 @@ public class Task {
     private Integer areaId;
     private Integer superId;
     private Integer level;
+
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beginTime;
+
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     private Integer state;
     private Integer finishRate;

@@ -69,7 +69,7 @@ public interface TaskMapper {
     /*
     * 新增任务
     * */
-    @Insert({"insert into task(id,title,user_id,content,area_id,super_id,level,begin_time,end_time,state,finish_rate) values(#{id},#{title},#{userId},#{content},#{areaId},#{superId},#{level},#{beginTime},#{endTime},#{state},#{finishRate})"})
+    @Insert({"insert into task(title,user_id,content,area_id,super_id,level,begin_time,end_time,state,finish_rate) values(#{title},#{userId},#{content},#{areaId},#{superId},#{level},#{beginTime},#{endTime},#{state},#{finishRate})"})
     public boolean insertTask(Task task);
 
     /*
