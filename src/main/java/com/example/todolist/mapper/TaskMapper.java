@@ -20,7 +20,7 @@ public interface TaskMapper {
     * 根据任务标题返回任务对象
     * */
     @Select("select * from task where title like #{title}")
-    public List<Task> getTaskByTitle(@Param("title") String title);
+    public Task getTaskByTitle(@Param("title") String title);
 
     /*
     * 根据任务id返回任务对象
