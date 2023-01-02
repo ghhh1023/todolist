@@ -131,6 +131,9 @@ public class TaskServiceImpl implements TaskService {
     public boolean alterTaskContentById(String content, List<String> taskPictureSrcList, Integer taskId) {
         boolean flag1 = taskMapper.alterTaskContentById(content, taskId);
         boolean flag2 = taskPictureMapper.deleteTaskPicture(taskId);
+        if (taskPictureMapper.getPictureByTaskId(taskId) == null){
+            flag2 = true;
+        }
         boolean flag3 = true;
         TaskPicture taskPicture = new TaskPicture();
         for(String pictureSrc : taskPictureSrcList){
