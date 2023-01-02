@@ -91,7 +91,6 @@ public class TaskServiceImpl implements TaskService {
         return areaMapper.alterArea(area);
     }
 
-    /*2022-12-20*/
     @Override
     public boolean addTask(Task task) {
         return taskMapper.insertTask(task);
@@ -162,5 +161,10 @@ public class TaskServiceImpl implements TaskService {
             taskMapper.alterTaskStateById(newState, task.getId());
         }
         return true;
+    }
+
+    @Override
+    public Task getTaskByTitle(String title) {
+        return taskMapper.getTaskByTitle(title);
     }
 }

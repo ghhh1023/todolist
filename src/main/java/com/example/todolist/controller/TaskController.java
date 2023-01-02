@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -92,10 +94,33 @@ public class TaskController {
     }
 
     @PostMapping("/insertTask")
-    public RetJson addTask(@RequestBody Task task){
+    public RetJson addTask(@Param("level") Integer level,@Param("superId") Integer superId,
+                           @Param("beginTime") String beginTime,@Param("endTime") String endTime,
+                           @Param("finishRate") Integer finishRate,@Param("title") String title,
+                           @Param("areaId") Integer areaId){
+        Task task=new Task();
+        task.setAreaId(areaId);
+        task.setTitle(title);
+        task.setFinishRate(finishRate);
+        task.setSuperId(superId);
+        task.setLevel(level);
+        DateFormat cstFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat gmtFormate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        try {
+            Date date1=cstFormate.parse(beginTime);
+            Date date2=cstFormate.parse(endTime);
+            System.out.println(date1);
+            task.setBeginTime(date1);
+            task.setEndTime(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Integer id = user.getId();
         System.out.println(id);
-        if(taskService.getTaskById(task.getId())!=null){
+        task.setUserId(id);
+        System.out.println(task.toString());
+        if(taskService.getTaskByTitle(task.getTitle())!=null){
             return RetJson.fail(-1, "任务已存在");
         }else if(taskService.addTask(task)){
             return RetJson.success(0, "添加成功");

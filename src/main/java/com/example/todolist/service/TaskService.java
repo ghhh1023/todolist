@@ -72,4 +72,9 @@ public interface TaskService {
     * 刷新数据库
     * */
     public boolean refreshTask(Integer userId);
+
+    /*
+    * 通过标题获取任务
+    * */
+    public Task getTaskByTitle(String title);
 }
