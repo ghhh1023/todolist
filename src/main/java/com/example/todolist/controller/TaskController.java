@@ -99,8 +99,10 @@ public class TaskController {
         Integer id = user.getId();
         task.setUserId(id);
         System.out.println(task.toString());
-        if(taskService.addTask(task)){
-            return RetJson.success(0, "添加成功");
+        if(task.getEndTime().getTime()>=task.getBeginTime().getTime()){
+            if(taskService.addTask(task)){
+                return RetJson.success(0, "添加成功");
+            }
         }
         return RetJson.fail(-2, "添加失败");
     }
