@@ -99,9 +99,7 @@ public class TaskController {
         Integer id = user.getId();
         task.setUserId(id);
         System.out.println(task.toString());
-        if(taskService.getTaskByTitle(task.getTitle())!=null){
-            return RetJson.fail(-1, "任务已存在");
-        }else if(taskService.addTask(task)){
+        if(taskService.addTask(task)){
             return RetJson.success(0, "添加成功");
         }
         return RetJson.fail(-2, "添加失败");

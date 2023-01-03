@@ -49,7 +49,7 @@ public interface TaskMapper {
     /*
      * 查询指定分区指定任务等级和指定完成度的任务数量
      * */
-    @Select("select count(*) from task where area_id=#{areaId} and level=#{level} and state=#{state} and finish_rate <#{finishRate}")
+    @Select("select count(*) from task where area_id=#{areaId} and level=#{level} and state=#{state} and finish_rate <#{finishRate} and super_id = 0")
     public Integer getTaskLevelCountOfArea(@Param("areaId") Integer areaId,
                                            @Param("level") Integer level,
                                            @Param("state") Integer state,
