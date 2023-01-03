@@ -178,6 +178,9 @@ public class TaskServiceImpl implements TaskService {
     public boolean alterTask(Task task) {
         boolean flag1 = taskMapper.alterTask(task);
         boolean flag2 = taskMapper.alterTaskLevel(task.getLevel(), task.getId());
+        if (taskMapper.getSubTasksCount(task.getId()) == 0){
+            flag2 = true;
+        }
         return flag1 && flag2;
     }
 

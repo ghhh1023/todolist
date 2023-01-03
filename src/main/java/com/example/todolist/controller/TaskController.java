@@ -108,11 +108,15 @@ public class TaskController {
     }
     @PutMapping("/updateTask")
     public RetJson updateTask(@RequestBody Task task){
+        System.out.println(task);
+        System.out.println(taskService.getTaskById(task.getId()));
         if (taskService.getTaskById(task.getId()) == null){
             return RetJson.fail(-2, "更新失败");
         }
-        if(task.getEndTime().getTime()<task.getBeginTime().getTime()){
-            return RetJson.fail(-2, "更新失败");
+        if (task.getEndTime() != null && task.getBeginTime() != null){
+            if(task.getEndTime().getTime()<task.getBeginTime().getTime()){
+                return RetJson.fail(-2, "更新失败");
+            }
         }
         Task pastTask = taskService.getTaskById(task.getId());
         CopyFieldValue.copyFieldValue(task, pastTask);
