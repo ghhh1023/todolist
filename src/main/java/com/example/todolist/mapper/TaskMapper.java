@@ -75,8 +75,14 @@ public interface TaskMapper {
     /*
     * 通过任务id删除任务
     * */
-    @Delete({"delete from task where id=#{id}"})
-    public boolean deleteTaskById(@Param("id") Integer id);
+    @Delete({"delete from task where id=#{id} and user_id=#{userId}"})
+    public boolean deleteTaskById(@Param("id") Integer id, @Param("userId") Integer userId);
+
+    /*
+     * 通过父id删除子任务
+     * */
+    @Delete({"delete from task where super_id=#{superId} and user_id=#{userId}"})
+    public boolean deleteTaskBySuperId(@Param("superId") Integer superId, @Param("userId") Integer userId);
 
     /*
      * 通过任务标题删除任务
@@ -147,8 +153,14 @@ public interface TaskMapper {
     /*
      * 通过id更新整条任务
      * */
-    @Update("update task set title = #{title},user_id = #{userId},content = #{content},area_id = #{areaId},super_id = #{superId},level = #{level},begin_time = #{beginTime},end_time = #{endTime},state = #{state},finish_rate = #{finishRate} where id=#{id}")
+    @Update("update task set title = #{title},level = #{level},begin_time = #{beginTime},end_time = #{endTime},finish_rate = #{finishRate} where id=#{id}")
     public boolean alterTask(Task task);
+
+    /*
+     * 通过父id更新子任务优先级
+     * */
+    @Update("update task set level = #{level} where super_id=#{superId}")
+    public boolean alterTaskLevel(@Param("level") Integer level, @Param("superId") Integer superId);
 
     /*
      * 通过任务id修改任务状态

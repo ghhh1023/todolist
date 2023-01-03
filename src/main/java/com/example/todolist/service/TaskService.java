@@ -77,4 +77,9 @@ public interface TaskService {
     * 通过标题获取任务
     * */
     public Task getTaskByTitle(String title);
+
+    public boolean alterTask(Task task);
+
+    public boolean deleteTask(Integer id, Integer userId);
+
 }

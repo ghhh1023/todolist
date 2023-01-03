@@ -106,6 +106,30 @@ public class TaskController {
         }
         return RetJson.fail(-2, "添加失败");
     }
+    @PutMapping("/updateTask")
+    public RetJson updateTask(@RequestBody Task task){
+        if (taskService.getTaskById(task.getId()) == null){
+            return RetJson.fail(-2, "更新失败");
+        }
+        if(task.getEndTime().getTime()<task.getBeginTime().getTime()){
+            return RetJson.fail(-2, "更新失败");
+        }
+        Task pastTask = taskService.getTaskById(task.getId());
+        CopyFieldValue.copyFieldValue(task, pastTask);
+        if (taskService.alterTask(task)){
+            return RetJson.success(0, "更新成功");
+        }
+        return RetJson.fail(-2, "更新失败");
+    }
+
+    @DeleteMapping("/deleteTask/{id}")
+    public RetJson deleteTask(@PathVariable("id") Integer id){
+        Integer userId = user.getId();
+        if (taskService.deleteTask(id, userId)){
+            return RetJson.success(0, "删除成功");
+        }
+        return RetJson.fail(-1, "任务不存在，删除失败");
+    }
 
     @PostMapping("/getAreaTask")
     public RetJson getAreaTask(@Param("areaId") Integer areaId){

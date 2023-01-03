@@ -171,4 +171,19 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskByTitle(String title) {
         return taskMapper.getTaskByTitle(title);
     }
+
+
+    @Override
+    @Transactional
+    public boolean alterTask(Task task) {
+        boolean flag1 = taskMapper.alterTask(task);
+        boolean flag2 = taskMapper.alterTaskLevel(task.getLevel(), task.getId());
+        return flag1 && flag2;
+    }
+
+    @Override
+    public boolean deleteTask(Integer id, Integer userId) {
+        taskMapper.deleteTaskBySuperId(id, userId);
+        return taskMapper.deleteTaskById(id, userId);
+    }
 }
