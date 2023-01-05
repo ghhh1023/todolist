@@ -217,4 +217,143 @@ public interface TaskMapper {
     @Select("select * from task where user_id = #{userId}")
     public List<Task> getAllTasksByUserId(@Param("userId") Integer userId);
 
+    /*
+     * 获取用户近一周的任务总数
+     * */
+    @Select("select ifnull(b.count,0) as count\n" +
+            "from (\n" +
+            "    SELECT curdate() as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 1 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 2 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 3 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 4 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 5 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 6 day) as click_date\n" +
+            ") a left join (\n" +
+            "  select DATE_FORMAT(begin_time, '%Y-%m-%d' ) as datetime, count(*) as count\n" +
+            "  from task\n" +
+            "\twhere super_id = 0 and user_id=#{userId} and level > 1\n" +
+            "  group by begin_time\n" +
+            ") b on a.click_date = b.datetime;")
+    public List<Integer> getTotalTaskNumNearlySeven(@Param("userId") Integer userId);
+
+    /*
+     * 获取用户近一周已完成的任务数
+     * */
+    @Select("select ifnull(b.count,0) as count\n" +
+            "from (\n" +
+            "    SELECT curdate() as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 1 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 2 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 3 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 4 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 5 day) as click_date\n" +
+            "    union all\n" +
+            "    SELECT date_sub(curdate(), interval 6 day) as click_date\n" +
+            ") a left join (\n" +
+            "  select DATE_FORMAT(begin_time, '%Y-%m-%d' ) as datetime, count(*) as count\n" +
+            "  from task\n" +
+            "\twhere super_id = 0 and user_id=#{userId} and level > 1 and finish_rate = 100\n" +
+            "  group by begin_time\n" +
+            ") b on a.click_date = b.datetime;")
+    public List<Integer> getCplTaskNumNearlySeven(@Param("userId") Integer userId);
+
+
+    /*
+     * 获取用户本月的任务总数
+     * */
+    @Select("SELECT ifnull(b.num,0) count FROM(\n" +
+            " \n" +
+            "select date from (\n" +
+            "SELECT DATE_FORMAT(DATE_SUB(last_day(curdate()), INTERVAL xc-1 day), '%Y-%m-%d') as date\n" +
+            "    FROM (\n" +
+            "        SELECT @xi:=@xi+1 as xc from\n" +
+            "            (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) xc1,\n" +
+            "            (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) xc2,\n" +
+            "            (SELECT @xi:=0) xc0\n" +
+            "        ) xcxc) x0 where x0.date >= (select date_add(curdate(),interval-day(curdate())+1 day)) ORDER BY date asc) a \n" +
+            " \n" +
+            "LEFT JOIN\n" +
+            "    (SELECT\n" +
+            "        count(*) num,DATE_FORMAT( begin_time, '%Y-%m-%d' ) dates\n" +
+            "        from task\n" +
+            "        where super_id = 0 and user_id=#{userId} and level > 1" +
+            "        GROUP BY dates) b \n" +
+            " \n" +
+            "ON a.date=b.dates ORDER BY date asc")
+    public List<Integer> getTotalTaskNumThisMonth(@Param("userId") Integer userId);
+
+    /*
+     * 获取用户本月已完成的任务数
+     * */
+    @Select("SELECT ifnull(b.num,0) count FROM(\n" +
+            " \n" +
+            "select date from (\n" +
+            "SELECT DATE_FORMAT(DATE_SUB(last_day(curdate()), INTERVAL xc-1 day), '%Y-%m-%d') as date\n" +
+            "    FROM (\n" +
+            "        SELECT @xi:=@xi+1 as xc from\n" +
+            "            (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) xc1,\n" +
+            "            (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) xc2,\n" +
+            "            (SELECT @xi:=0) xc0\n" +
+            "        ) xcxc) x0 where x0.date >= (select date_add(curdate(),interval-day(curdate())+1 day)) ORDER BY date asc) a \n" +
+            " \n" +
+            "LEFT JOIN\n" +
+            "    (SELECT\n" +
+            "        count(*) num,DATE_FORMAT( begin_time, '%Y-%m-%d' ) dates\n" +
+            "        from task\n" +
+            "        where super_id = 0 and user_id=#{userId} and level > 1 and finish_rate = 100" +
+            "        GROUP BY dates) b \n" +
+            " \n" +
+            "ON a.date=b.dates ORDER BY date asc")
+    public List<Integer> getCplTaskNumThisMonth(@Param("userId") Integer userId);
+
+    /*
+     * 获取用户本年12个月的任务总数
+     * */
+    @Select("SELECT IFNULL(b.con,0) as c FROM(SELECT  STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d') as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 1 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 2 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 3 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 4 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 5 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 6 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 7 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 8 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 9 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 10 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 11 MONTH) as click_date) a LEFT JOIN(\n" +
+            "SELECT COUNT(*) as con , CONCAT(YEAR(begin_time),'-',MONTH(begin_time)) as mon FROM task\n" +
+            "WHERE user_id=#{userId} and level > 1 and super_id = 0\n" +
+            "GROUP BY mon)\n" +
+            "b ON CONCAT(YEAR(click_date),'-',MONTH(click_date))=b.mon")
+    public List<Integer> getTotalTaskNumThisYear(@Param("userId") Integer userId);
+
+    @Select("SELECT IFNULL(b.con,0) as c FROM(SELECT  STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d') as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 1 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 2 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 3 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 4 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 5 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 6 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 7 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 8 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 9 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 10 MONTH) as click_date UNION ALL\n" +
+            "SELECT  DATE_ADD(STR_TO_DATE(CONCAT(YEAR(CURDATE()),'-',1,'-',1) , '%Y-%m-%d'),INTERVAL 11 MONTH) as click_date) a LEFT JOIN(\n" +
+            "SELECT COUNT(*) as con , CONCAT(YEAR(begin_time),'-',MONTH(begin_time)) as mon FROM task\n" +
+            "WHERE user_id=#{userId} and level > 1 and super_id = 0 and finish_rate = 100\n" +
+            "GROUP BY mon)\n" +
+            "b ON CONCAT(YEAR(click_date),'-',MONTH(click_date))=b.mon")
+    public List<Integer> getCplTaskNumThisYear(@Param("userId") Integer userId);
 }

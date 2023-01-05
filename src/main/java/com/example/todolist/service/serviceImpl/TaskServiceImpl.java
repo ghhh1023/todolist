@@ -7,6 +7,7 @@ import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.Task;
 import com.example.todolist.pojo.TaskPicture;
 import com.example.todolist.service.TaskService;
+import com.example.todolist.vo.DataList;
 import com.example.todolist.vo.TaskAreaList;
 import com.example.todolist.vo.TaskPictureContent;
 import lombok.Data;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -188,5 +190,68 @@ public class TaskServiceImpl implements TaskService {
     public boolean deleteTask(Integer id, Integer userId) {
         taskMapper.deleteTaskBySuperId(id, userId);
         return taskMapper.deleteTaskById(id, userId);
+    }
+
+    @Override
+    public DataList getDataList(Integer userId) {
+        DataList dataList = new DataList();
+        List<Integer> weekTotalList = taskMapper.getTotalTaskNumNearlySeven(userId);
+        List<Integer> weekCplList = taskMapper.getCplTaskNumNearlySeven(userId);
+        List<Double> weekRateList = new ArrayList<>();
+        for (int i = 0; i < 7; i++){
+            if (weekCplList.get(i) == 0){
+                weekRateList.add(0.00);
+            }else {
+                double rate = (double)weekCplList.get(i) / weekTotalList.get(i) * 100;
+                weekRateList.add(new BigDecimal(rate).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+        }
+        List<Integer> tmpMonthTotalList = taskMapper.getTotalTaskNumThisMonth(userId);
+        List<Integer> tmpMonthCplList = taskMapper.getCplTaskNumThisMonth(userId);
+        List<Integer> monthTotalList = new ArrayList<>();
+        List<Integer> monthCplList = new ArrayList<>();
+        List<Double> monthRateList = new ArrayList<>();
+        int totalSum = 0, cplSum = 0, dayCount = 0;
+        for (int i = 0; i < 28; i++){
+            totalSum += tmpMonthTotalList.get(i);
+            cplSum += tmpMonthCplList.get(i);
+            dayCount++;
+            if (dayCount == 7){
+                monthTotalList.add(totalSum);
+                monthCplList.add(cplSum);
+                totalSum = 0;
+                cplSum = 0;
+                dayCount = 0;
+            }
+        }
+        for (int i = 0; i < 4; i++){
+            if (monthCplList.get(i) == 0){
+                monthRateList.add(0.00);
+            }else {
+                double rate = (double)monthCplList.get(i) / monthTotalList.get(i) * 100;
+                monthRateList.add(new BigDecimal(rate).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+        }
+        List<Integer> yearTotalList = taskMapper.getTotalTaskNumThisYear(userId);
+        List<Integer> yearCplList = taskMapper.getCplTaskNumThisYear(userId);
+        List<Double> yearRateList = new ArrayList<>();
+        for (int i = 0; i < 12; i++){
+            if (yearCplList.get(i) == 0){
+                yearRateList.add(0.00);
+            }else {
+                double rate = (double)yearCplList.get(i) / yearTotalList.get(i) * 100;
+                yearRateList.add(new BigDecimal(rate).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+        }
+        dataList.setWeekTotalList(weekTotalList);
+        dataList.setWeekCplList(weekCplList);
+        dataList.setWeekRateList(weekRateList);
+        dataList.setMonthTotalList(monthTotalList);
+        dataList.setMonthCplList(monthCplList);
+        dataList.setMonthRateList(monthRateList);
+        dataList.setYearTotalList(yearTotalList);
+        dataList.setYearCplList(yearCplList);
+        dataList.setYearRateList(yearRateList);
+        return dataList;
     }
 }

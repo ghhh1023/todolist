@@ -4,6 +4,7 @@ import com.example.todolist.pojo.Area;
 import com.example.todolist.pojo.Picture;
 import com.example.todolist.pojo.Task;
 import com.example.todolist.pojo.TaskPicture;
+import com.example.todolist.vo.DataList;
 import com.example.todolist.vo.TaskAreaList;
 
 import java.util.List;
@@ -81,5 +82,10 @@ public interface TaskService {
     public boolean alterTask(Task task);
 
     public boolean deleteTask(Integer id, Integer userId);
+
+    /*
+     * 统计任务数据
+     * */
+    public DataList getDataList(Integer userId);
 
 }

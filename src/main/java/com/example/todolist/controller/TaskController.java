@@ -6,6 +6,7 @@ import com.example.todolist.pojo.Task;
 import com.example.todolist.pojo.User;
 import com.example.todolist.pojo.UserInfo;
 import com.example.todolist.service.TaskService;
+import com.example.todolist.service.TimeService;
 import com.example.todolist.utils.CopyFieldValue;
 import com.example.todolist.vo.TaskContent;
 import com.example.todolist.vo.TaskPictureContent;
@@ -28,6 +29,10 @@ import java.util.*;
 public class TaskController {
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    TimeService timeService;
+
 
     User user=null;
     UserInfo userInfo=null;
@@ -291,5 +296,14 @@ public class TaskController {
             return RetJson.success(0, "更新成功");
         }
         return RetJson.fail(-1,"更新失败");
+    }
+
+    @GetMapping("getStatisticalData")
+    public RetJson getStatisticalData(){
+        Integer id = user.getId();
+        Map map = new HashMap();
+        map.put("weekList",timeService.getTimeList());
+        map.put("dataList",taskService.getDataList(id));
+        return RetJson.success(0, "查询成功", map);
     }
 }
