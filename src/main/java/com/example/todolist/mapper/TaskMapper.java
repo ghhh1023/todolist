@@ -240,7 +240,7 @@ public interface TaskMapper {
             "  from task\n" +
             "\twhere super_id = 0 and user_id=#{userId} and level > 1\n" +
             "  group by begin_time\n" +
-            ") b on a.click_date = b.datetime;")
+            ") b on a.click_date = b.datetime ORDER BY click_date asc;")
     public List<Integer> getTotalTaskNumNearlySeven(@Param("userId") Integer userId);
 
     /*
@@ -266,7 +266,7 @@ public interface TaskMapper {
             "  from task\n" +
             "\twhere super_id = 0 and user_id=#{userId} and level > 1 and finish_rate = 100\n" +
             "  group by begin_time\n" +
-            ") b on a.click_date = b.datetime;")
+            ") b on a.click_date = b.datetime ORDER BY click_date asc;")
     public List<Integer> getCplTaskNumNearlySeven(@Param("userId") Integer userId);
 
 
