@@ -26,6 +26,6 @@ public interface TimeMapper {
             ") a left join (\n" +
             "  select DATE_FORMAT(begin_time, '%Y-%m-%d' ) as datetime, count(*) as count\n" +
             "  from task\n" +
-            ") b on a.click_date = b.datetime;")
+            ") b on a.click_date = b.datetime order by click_date asc;")
     public List<Date> getTimeList();
 }
